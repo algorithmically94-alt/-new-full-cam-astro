@@ -21,6 +21,7 @@ jobs:
           echo "3459ab4f74992298deacb1709e7d991a7e97654787292e5b1088fb963adf8a0a  /tmp/camera-recovery.patch" | sha256sum --check
           patch -p1 < /tmp/camera-recovery.patch
           patch -p1 < camera-fix/long-exposure-timeout.patch
+          patch -p1 < camera-fix/compile-fix.patch
           test -f app/src/main/java/com/nightskylapse/fullcamastro/CaptureService.java
       - uses: actions/setup-java@v4
         with:
