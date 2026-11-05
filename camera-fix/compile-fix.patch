@@ -1,0 +1,17 @@
+--- a/app/src/main/java/com/nightskylapse/fullcamastro/MainActivity.java
++++ b/app/src/main/java/com/nightskylapse/fullcamastro/MainActivity.java
+@@ -270,13 +270,13 @@
+         int count = p.getInt("frames", 0);
+         long began = p.getLong("began", 0L);
+         long elapsed = began > 0 && phase.equals("capturing") ? (SystemClock.elapsedRealtime() - began) / 1000 : p.getLong("elapsed", 0L);
++        boolean recording = CaptureService.serviceAlive && (phase.equals("capturing") || phase.equals("starting"));
+         int recoveries = p.getInt("recoveries", 0);
+         long latestFrame = p.getLong("last_frame_uptime", 0);
+         String lastInfo = recording && latestFrame > 0
+                 ? " · last photo " + ((SystemClock.elapsedRealtime() - latestFrame) / 1000) + "s ago" : "";
+         int sec = count / 24;
+         counters.setText(String.format(Locale.US, "%d frames  ·  %d:%02d estimated video  ·  %d:%02d elapsed", count, sec/60, sec%60, elapsed/60, elapsed%60) + " · auto-restarts " + recoveries + lastInfo);
+-        boolean recording = CaptureService.serviceAlive && (phase.equals("capturing") || phase.equals("starting"));
+         boolean exporting = CaptureService.serviceAlive && phase.equals("exporting");
+         start.setEnabled(!recording && !exporting);
+         stop.setEnabled(recording);
