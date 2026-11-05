@@ -1,0 +1,14 @@
+--- a/app/src/main/java/com/nightskylapse/fullcamastro/CaptureService.java
++++ b/app/src/main/java/com/nightskylapse/fullcamastro/CaptureService.java
+@@ -293,6 +293,11 @@
+             } else {
+                 cameraNotice = lensNote + " · automatic exposure (manual sensor unavailable)";
+             }
++            // Long astrophotography exposures must not be mistaken for a stalled JPEG.
++            // Allow the sensor exposure plus generous ISP/JPEG processing time.
++            long shutterMs = manual ? exposureNs / 1_000_000L
++                    : Math.max(1000L, (long)(requestedExposure * 1000));
++            jpegTimeoutMs = Math.max(30000L, shutterMs * 2L + 12000L);
+             Integer sensor = ch.get(CameraCharacteristics.SENSOR_ORIENTATION);
+             degrees = ((sensor == null ? 90 : sensor) - degrees + 360) % 360;
+             StreamConfigurationMap map = ch.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
